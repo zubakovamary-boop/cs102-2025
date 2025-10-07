@@ -1,2 +1,6 @@
+"""функция text возвращает строку message"""
+
+
 def text():
-    return message
+    """Return a constant status message."""
+    return "message"
