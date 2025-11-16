@@ -43,7 +43,7 @@ def multiplicative_inverse(e: int, phi: int) -> int:
     g, x, y = extended_gcd(e, phi)
 
     if g != 1:
-        return None
+        raise ValueError("Multiplicative inverse does not exist")
     else:
         return x % phi
 
