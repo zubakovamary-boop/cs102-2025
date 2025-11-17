@@ -30,6 +30,7 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
             key_idx += 1
         else:
             ciphertext += ch
+            key_idx += 1
     return ciphertext
 
 
@@ -66,8 +67,8 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
             key_idx += 1
         else:
             plaintext += ch
+            key_idx += 1
     return plaintext
 
 
-print(encrypt_vigenere("ATTACKATDAWN", "lemon"))
-print(decrypt_vigenere("LXFOPVEFRNHR", "lemon"))
+print(encrypt_vigenere("introduction to python", "lsci"))
