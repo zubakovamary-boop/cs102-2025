@@ -40,30 +40,28 @@ def multiplicative_inverse(e: int, phi: int) -> int:
     >>> multiplicative_inverse(7, 40)
     23
     """
-    g, x, y = extended_gcd(e, phi)
+    # расширенный алгоритм Евклида в итеративной форме
+    pr_rem, r = e, phi
+    pr_a, a = 1, 0  # коэффициенты для e
+    pr_b, b = 0, 1  # коэффициенты для phi
 
-    if g != 1:
+    while r != 0:
+        quat = pr_rem // r
+        pr_rem, r = r, pr_rem - quat * r
+        pr_a, a = a, pr_a - quat * a
+        pr_b, b = b, pr_b - quat * b
+
+    if pr_rem != 1:
         raise ValueError("Multiplicative inverse does not exist")
-    else:
-        return x % phi
-
-
-def extended_gcd(a, b):
-    if b == 0:
-        return (a, 1, 0)
-
-    g, x1, y1 = extended_gcd(b, a % b)
-
-    x = y1
-    y = x1 - (a // b) * y1
-
-    return (g, x, y)
+    return pr_a % phi
 
 
 print(multiplicative_inverse(7, 40))
 
 
-def generate_keypair(p: int, q: int) -> tp.Tuple[tp.Tuple[int, int], tp.Tuple[int, int]]:
+def generate_keypair(
+    p: int, q: int
+) -> tp.Tuple[tp.Tuple[int, int], tp.Tuple[int, int]]:
     if not (is_prime(p) and is_prime(q)):
         raise ValueError("Both numbers must be prime.")
     elif p == q:
