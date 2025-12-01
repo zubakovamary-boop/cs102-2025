@@ -1,5 +1,6 @@
 import pathlib
 import typing as tp
+import random
 
 T = tp.TypeVar("T")
 
@@ -115,6 +116,7 @@ def find_empty_positions(
         for col in range(len(grid[row])):
             if grid[row][col] == ".":
                 return (row, col)
+
     return None
 
 
@@ -171,14 +173,15 @@ def solve(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.List[tp.List[str]]]:
 
 def check_solution(solution: tp.List[tp.List[str]]) -> bool:
     """Если решение solution верно, то вернуть True, в противном случае False"""
-    dig = set("123456789")
+    digs = set("123456789")
 
     for row in solution:
-        if set(row) != dig:
+        if set(row) != digs:
             return False
+
     for col in range(len(solution)):
         check_col = set(solution[row][col] for row in range(len(solution)))
-        if check_col != dig:
+        if check_col != digs:
             return False
 
     for b_row in range(0, 9, 3):
@@ -187,7 +190,7 @@ def check_solution(solution: tp.List[tp.List[str]]) -> bool:
             for r in range(b_row, b_row + 3):
                 for c in range(b_col, b_col + 3):
                     block.append(solution[r][c])
-            if set(block) != dig:
+            if set(block) != digs:
                 return False
 
     return True
@@ -218,7 +221,28 @@ def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
     >>> check_solution(solution)
     True
     """
-    pass
+    N = max(0, min(N, 81))
+
+    grid = [["." for _ in range(9)] for _ in range(9)]
+
+    for block in range(3):
+        nums = [str(i) for i in range(1, 10)]
+        random.shuffle(nums)
+        index = 0
+        for i in range(3):
+            for j in range(3):
+                grid[block * 3 + i][block * 3 + j] = nums[index]
+                index += 1
+
+    solve(grid)
+
+    all_positions = [(r, c) for r in range(9) for c in range(9)]
+    random.shuffle(all_positions)
+
+    for i, j in all_positions[: (81 - N)]:
+        grid[i][j] = "."
+
+    return grid
 
 
 if __name__ == "__main__":
