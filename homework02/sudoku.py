@@ -1,6 +1,6 @@
 import pathlib
-import typing as tp
 import random
+import typing as tp
 
 T = tp.TypeVar("T")
 
@@ -25,10 +25,7 @@ def display(grid: tp.List[tp.List[str]]) -> None:
     line = "+".join(["-" * (width * 3)] * 3)
     for row in range(9):
         print(
-            "".join(
-                grid[row][col].center(width) + ("|" if str(col) in "25" else "")
-                for col in range(len(grid[row]))
-            )
+            "".join(grid[row][col].center(width) + ("|" if str(col) in "25" else "") for col in range(len(grid[row])))
         )
         if str(row) in "25":
             print(line)
@@ -120,9 +117,7 @@ def find_empty_positions(
     return None
 
 
-def find_possible_values(
-    grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]
-) -> tp.Set[str]:
+def find_possible_values(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.Set[str]:
     """Вернуть множество возможных значения для указанной позиции
     >>> grid = read_sudoku('puzzle1.txt')
     >>> values = find_possible_values(grid, (0,2))
@@ -196,8 +191,14 @@ def check_solution(solution: tp.List[tp.List[str]]) -> bool:
     return True
 
 
+grid = read_sudoku("puzzle1.txt")
 solution = solve(grid)
-print(check_solution(solution))
+
+if solution is None:
+    print("Решения нет")
+else:
+    display(solution)
+    print(check_solution(solution))
 
 
 def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
@@ -222,7 +223,6 @@ def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
     True
     """
     N = max(0, min(N, 81))
-
     grid = [["." for _ in range(9)] for _ in range(9)]
 
     for block in range(3):
@@ -235,7 +235,6 @@ def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
                 index += 1
 
     solve(grid)
-
     all_pos = [(r, c) for r in range(9) for c in range(9)]
     random.shuffle(all_pos)
 
