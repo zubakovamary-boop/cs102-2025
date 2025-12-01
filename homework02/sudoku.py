@@ -1,3 +1,7 @@
+"""
+Sudoku solver implementation.
+"""
+
 import pathlib
 import random
 import typing as tp
@@ -8,12 +12,13 @@ T = tp.TypeVar("T")
 def read_sudoku(path: tp.Union[str, pathlib.Path]) -> tp.List[tp.List[str]]:
     """Прочитать Судоку из указанного файла"""
     path = pathlib.Path(path)
-    with path.open() as f:
+    with path.open(encoding="utf-8") as f:
         puzzle = f.read()
     return create_grid(puzzle)
 
 
 def create_grid(puzzle: str) -> tp.List[tp.List[str]]:
+    """создает сетку судоку"""
     digits = [c for c in puzzle if c in "123456789."]
     grid = group(digits, 9)
     return grid
@@ -25,10 +30,7 @@ def display(grid: tp.List[tp.List[str]]) -> None:
     line = "+".join(["-" * (width * 3)] * 3)
     for row in range(9):
         print(
-            "".join(
-                grid[row][col].center(width) + ("|" if str(col) in "25" else "")
-                for col in range(len(grid[row]))
-            )
+            "".join(grid[row][col].center(width) + ("|" if str(col) in "25" else "") for col in range(len(grid[row])))
         )
         if str(row) in "25":
             print(line)
@@ -84,10 +86,11 @@ def get_block(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[s
     ['2', '8', '.', '.', '.', '5', '.', '7', '9']
     """
     row, col = pos
-    start_coor_row = (row // 3) * 3
+    start_coor_row = (row // 3) * 3  # координаты левой верхней позиции блока
     start_coor_col = (col // 3) * 3
+
     block = []
-    for r in range(start_coor_row, start_coor_row + 3):
+    for r in range(start_coor_row, start_coor_row + 3):  # для блока
         for c in range(start_coor_col, start_coor_col + 3):
             block.append(grid[r][c])
     return block
@@ -112,9 +115,7 @@ def find_empty_positions(
     return None
 
 
-def find_possible_values(
-    grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]
-) -> tp.Set[str]:
+def find_possible_values(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.Set[str]:
     """Вернуть множество возможных значения для указанной позиции
     >>> grid = read_sudoku('puzzle1.txt')
     >>> values = find_possible_values(grid, (0,2))
@@ -128,15 +129,15 @@ def find_possible_values(
     col_val = set(get_col(grid, pos))
     block_val = set(get_block(grid, pos))
 
-    taken_val = (row_val | col_val | block_val) - {"."}
+    taken_val = (row_val | col_val | block_val) - {"."}  # только цифры
     all_numb = set("123456789")
     possible_val = all_numb - taken_val
     return possible_val
 
 
 def solve(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.List[tp.List[str]]]:
-    """Решение пазла, заданного в grid"""
-    """ Как решать Судоку?
+    """Решение пазла, заданного в grid
+    Как решать Судоку?
         1. Найти свободную позицию
         2. Найти все возможные значения, которые могут находиться на этой позиции
         3. Для каждого возможного значения:
@@ -144,7 +145,15 @@ def solve(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.List[tp.List[str]]]:
             3.2. Продолжить решать оставшуюся часть пазла
     >>> grid = read_sudoku('puzzle1.txt')
     >>> solve(grid)
-    [['5', '3', '4', '6', '7', '8', '9', '1', '2'], ['6', '7', '2', '1', '9', '5', '3', '4', '8'], ['1', '9', '8', '3', '4', '2', '5', '6', '7'], ['8', '5', '9', '7', '6', '1', '4', '2', '3'], ['4', '2', '6', '8', '5', '3', '7', '9', '1'], ['7', '1', '3', '9', '2', '4', '8', '5', '6'], ['9', '6', '1', '5', '3', '7', '2', '8', '4'], ['2', '8', '7', '4', '1', '9', '6', '3', '5'], ['3', '4', '5', '2', '8', '6', '1', '7', '9']]
+    [['5', '3', '4', '6', '7', '8', '9', '1', '2'],
+    ['6', '7', '2', '1', '9', '5', '3', '4', '8'],
+    ['1', '9', '8', '3', '4', '2', '5', '6', '7'],
+    ['8', '5', '9', '7', '6', '1', '4', '2', '3'],
+    ['4', '2', '6', '8', '5', '3', '7', '9', '1'],
+    ['7', '1', '3', '9', '2', '4', '8', '5', '6'],
+    ['9', '6', '1', '5', '3', '7', '2', '8', '4'],
+    ['2', '8', '7', '4', '1', '9', '6', '3', '5'],
+    ['3', '4', '5', '2', '8', '6', '1', '7', '9']]
     """
     empty_pos = find_empty_positions(grid)
     if empty_pos is None:
@@ -188,7 +197,7 @@ def check_solution(solution: tp.List[tp.List[str]]) -> bool:
     return True
 
 
-def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
+def generate_sudoku(n: int) -> tp.List[tp.List[str]]:
     """Генерация судоку заполненного на N элементов
     >>> grid = generate_sudoku(40)
     >>> sum(1 for row in grid for e in row if e == '.')
@@ -209,7 +218,7 @@ def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
     >>> check_solution(solution)
     True
     """
-    N = max(0, min(N, 81))
+    n = max(0, min(n, 81))
     grid = [["." for _ in range(9)] for _ in range(9)]
 
     for block in range(3):
@@ -225,7 +234,7 @@ def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
     all_pos = [(r, c) for r in range(9) for c in range(9)]
     random.shuffle(all_pos)
 
-    for i, j in all_pos[: (81 - N)]:
+    for i, j in all_pos[: (81 - n)]:
         grid[i][j] = "."
 
     return grid
