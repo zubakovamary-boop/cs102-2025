@@ -236,10 +236,10 @@ def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
 
     solve(grid)
 
-    all_positions = [(r, c) for r in range(9) for c in range(9)]
-    random.shuffle(all_positions)
+    all_pos = [(r, c) for r in range(9) for c in range(9)]
+    random.shuffle(all_pos)
 
-    for i, j in all_positions[: (81 - N)]:
+    for i, j in all_pos[: (81 - N)]:
         grid[i][j] = "."
 
     return grid
