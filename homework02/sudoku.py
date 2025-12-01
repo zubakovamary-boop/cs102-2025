@@ -46,11 +46,6 @@ def group(values: tp.List[T], n: int) -> tp.List[tp.List[T]]:
     return res
 
 
-print(group([1, 2, 3, 4], 2))
-
-print(group([1, 2, 3, 4, 5, 6, 7, 8, 9], 3))
-
-
 def get_row(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[str]:
     """Возвращает все значения для номера строки, указанной в pos
     >>> get_row([['1', '2', '.'], ['4', '5', '6'], ['7', '8', '9']], (0, 0))
@@ -74,7 +69,10 @@ def get_col(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[str
     ['3', '6', '9']
     """
     _, col = pos
-    return [grid[row][col] for row in range(len([grid]))]
+    return [grid[row][col] for row in range(len(grid))]
+
+
+print(get_col([["1", "2", "."], ["4", "5", "6"], ["7", "8", "9"]], (0, 0)))
 
 
 def get_block(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[str]:
@@ -92,9 +90,14 @@ def get_block(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[s
     start_coor_col = (col // 3) * 3
     block = []
     for r in range(start_coor_row, start_coor_row + 3):
-        for c in range(start_coor_col):
+        for c in range(start_coor_col, start_coor_col + 3):
             block.append(grid[r][c])
     return block
+
+
+grid = read_sudoku("puzzle1.txt")
+print(len(grid), [len(row) for row in grid])
+print(get_block(grid, (0, 1)))
 
 
 def find_empty_positions(
