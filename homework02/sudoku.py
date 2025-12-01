@@ -25,7 +25,10 @@ def display(grid: tp.List[tp.List[str]]) -> None:
     line = "+".join(["-" * (width * 3)] * 3)
     for row in range(9):
         print(
-            "".join(grid[row][col].center(width) + ("|" if str(col) in "25" else "") for col in range(len(grid[row])))
+            "".join(
+                grid[row][col].center(width) + ("|" if str(col) in "25" else "")
+                for col in range(len(grid[row]))
+            )
         )
         if str(row) in "25":
             print(line)
@@ -70,9 +73,6 @@ def get_col(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[str
     return [grid[row][col] for row in range(len(grid))]
 
 
-print(get_col([["1", "2", "."], ["4", "5", "6"], ["7", "8", "9"]], (0, 0)))
-
-
 def get_block(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[str]:
     """Возвращает все значения из квадрата, в который попадает позиция pos
     >>> grid = read_sudoku('puzzle1.txt')
@@ -91,11 +91,6 @@ def get_block(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[s
         for c in range(start_coor_col, start_coor_col + 3):
             block.append(grid[r][c])
     return block
-
-
-grid = read_sudoku("puzzle1.txt")
-print(len(grid), [len(row) for row in grid])
-print(get_block(grid, (0, 1)))
 
 
 def find_empty_positions(
@@ -117,7 +112,9 @@ def find_empty_positions(
     return None
 
 
-def find_possible_values(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.Set[str]:
+def find_possible_values(
+    grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]
+) -> tp.Set[str]:
     """Вернуть множество возможных значения для указанной позиции
     >>> grid = read_sudoku('puzzle1.txt')
     >>> values = find_possible_values(grid, (0,2))
@@ -189,16 +186,6 @@ def check_solution(solution: tp.List[tp.List[str]]) -> bool:
                 return False
 
     return True
-
-
-grid = read_sudoku("puzzle1.txt")
-solution = solve(grid)
-
-if solution is None:
-    print("Решения нет")
-else:
-    display(solution)
-    print(check_solution(solution))
 
 
 def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
