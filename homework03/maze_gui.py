@@ -1,7 +1,9 @@
-import tkinter as tk
-from typing import List
-from tkinter import ttk, messagebox
 from copy import deepcopy
+from typing import List
+
+import tkinter as tk
+from tkinter import messagebox, ttk
+
 from maze import bin_tree_maze, solve_maze, add_path_to_grid
 
 
