@@ -133,8 +133,8 @@ def shortest_path(
         k -= 1
         if k < 1:
             break
-        neighbors = [(x, y + 1), (x, y - 1), (x + 1, y), (x - 1, y)]
-        for coord_x, coord_y in neighbors:
+        nbs = [(x, y + 1), (x, y - 1), (x + 1, y), (x - 1, y)]
+        for coord_x, coord_y in nbs:
             if 0 <= coord_x < rows and 0 <= coord_y < cols and grid[coord_x][coord_y] == k:
                 path.append((coord_x, coord_y))
                 x, y = coord_x, coord_y

@@ -21,7 +21,7 @@ def draw_cell(x, y, color, size: int = 10):
 Cell = Union[str, int]
 
 
-def draw_maze(grid: List[List[str]], size: int = 10):
+def draw_maze(grid: List[List[str | int]], size: int = 10):
     """для отрисовки лабиринта"""
     for x, row in enumerate(grid):
         for y, cell in enumerate(row):
