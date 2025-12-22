@@ -1,13 +1,16 @@
+"""Графическая отрисовка лабиринта и решения"""
+
 from copy import deepcopy
-from typing import List
+from typing import List, Union
 
 import tkinter as tk
 from tkinter import messagebox, ttk
 
-from maze import bin_tree_maze, solve_maze, add_path_to_grid
+from maze import add_path_to_grid, bin_tree_maze, solve_maze
 
 
 def draw_cell(x, y, color, size: int = 10):
+    """Для отрисовки клеток"""
     x *= size
     y *= size
     x1 = x + size
@@ -15,7 +18,11 @@ def draw_cell(x, y, color, size: int = 10):
     canvas.create_rectangle(x, y, x1, y1, fill=color)
 
 
+Cell = Union[str, int]
+
+
 def draw_maze(grid: List[List[str]], size: int = 10):
+    """для отрисовки лабиринта"""
     for x, row in enumerate(grid):
         for y, cell in enumerate(row):
             if cell == " ":
@@ -24,10 +31,13 @@ def draw_maze(grid: List[List[str]], size: int = 10):
                 color = "black"
             elif cell == "X":
                 color = "light green"
+            else:
+                color = "grey"
             draw_cell(y, x, color, size)
 
 
 def show_solution():
+    """Показать решения"""
     maze, path = solve_maze(GRID)
     maze = add_path_to_grid(GRID, path)
     if path:
