@@ -1,9 +1,7 @@
-"""Графическая отрисовка лабиринта и решения"""
-
 import tkinter as tk
 from copy import deepcopy
 from tkinter import messagebox, ttk
-from typing import List, Union
+from typing import List
 
 from maze import add_path_to_grid, bin_tree_maze, solve_maze
 
@@ -15,9 +13,6 @@ def draw_cell(x, y, color, size: int = 10):
     x1 = x + size
     y1 = y + size
     canvas.create_rectangle(x, y, x1, y1, fill=color)
-
-
-Cell = Union[str, int]
 
 
 def draw_maze(grid: List[List[str | int]], size: int = 10):
@@ -50,7 +45,10 @@ if __name__ == "__main__":
     N, M = 51, 77
 
     CELL_SIZE = 10
-    GRID = bin_tree_maze(N, M)
+    trying_grid = bin_tree_maze(N, M)
+    while not solve_maze(deepcopy(trying_grid))[1]:
+        try_grid = bin_tree_maze(N, M)
+    GRID = trying_grid
 
     while True:
         trying_grid = bin_tree_maze(N, M)
